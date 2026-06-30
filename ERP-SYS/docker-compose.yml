@@ -1,0 +1,130 @@
+version: "3.8"
+
+# ===========================================
+# ERP系统 Docker Compose 编排文件
+# ===========================================
+
+services:
+  # ==================== ERP应用服务 ====================
+  erp-sys:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: erp-sys
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/erp_db?useUnicode=true&characterEncoding=utf8mb4&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=guest
+      - SPRING_RABBITMQ_PASSWORD=guest
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - erp-network
+    restart: unless-stopped
+    volumes:
+      - erp-logs:/app/logs
+
+  # ==================== MySQL数据库服务 ====================
+  mysql:
+    image: mysql:8.0
+    container_name: erp-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=erp_db
+      - MYSQL_CHARSET=utf8mb4
+      - MYSQL_COLLATION=utf8mb4_unicode_ci
+      - TZ=Asia/Shanghai
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+08:00
+      - --lower_case_table_names=1
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    networks:
+      - erp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ==================== Redis缓存服务 ====================
+  redis:
+    image: redis:7-alpine
+    container_name: erp-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass ""
+    volumes:
+      - redis-data:/data
+    networks:
+      - erp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================== RabbitMQ消息队列服务 ====================
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: erp-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - TZ=Asia/Shanghai
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - erp-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+# ===========================================
+# 网络定义
+# ===========================================
+networks:
+  erp-network:
+    driver: bridge
+    name: erp-network
+
+# ===========================================
+# 数据卷定义
+# ===========================================
+volumes:
+  mysql-data:
+    name: erp-mysql-data
+  redis-data:
+    name: erp-redis-data
+  rabbitmq-data:
+    name: erp-rabbitmq-data
+  erp-logs:
+    name: erp-logs

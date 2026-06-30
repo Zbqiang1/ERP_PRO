@@ -1,0 +1,38 @@
+# ==================== 多阶段构建 Dockerfile ====================
+# 第一阶段：使用 Maven 构建项目
+FROM maven:3.8-openjdk-8-slim AS builder
+
+# 设置 Maven 工作目录
+WORKDIR /build
+
+# 先拷贝 pom.xml，利用 Docker 缓存层加速构建
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# 拷贝源代码并打包
+COPY src ./src
+RUN mvn clean package -DskipTests -B
+
+# 第二阶段：运行时镜像
+FROM openjdk:8-jre-alpine
+
+# 设置时区
+RUN apk add --no-cache tzdata && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo "Asia/Shanghai" > /etc/timezone && \
+    apk del tzdata
+
+# 创建应用目录
+WORKDIR /app
+
+# 从构建阶段复制 jar 包
+COPY --from=builder /build/target/*.jar app.jar
+
+# 暴露端口（根据实际 server.port 调整）
+EXPOSE ${serverPort}
+
+# JVM 参数
+ENV JAVA_OPTS="-Xms256m -Xmx512m -XX:+UseG1GC -Djava.security.egd=file:/dev/./urandom"
+
+# 启动应用
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

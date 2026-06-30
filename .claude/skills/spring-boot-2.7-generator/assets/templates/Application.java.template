@@ -1,0 +1,47 @@
+package ${basePackage};
+
+import lombok.extern.slf4j.Slf4j;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+/**
+ * ${projectName} 启动类
+ *
+ * @author {author}
+ * @since {date}
+ */
+@Slf4j
+@SpringBootApplication
+@MapperScan("${basePackage}.modules.*.mapper")
+public class ${applicationClassName} {
+
+    public static void main(String[] args) throws UnknownHostException {
+        ConfigurableApplicationContext application = SpringApplication.run(${applicationClassName}.class, args);
+
+        Environment env = application.getEnvironment();
+        String ip = InetAddress.getLocalHost().getHostAddress();
+        String port = env.getProperty("server.port", "8080");
+        String contextPath = env.getProperty("server.servlet.context-path", "");
+        String activeProfile = env.getProperty("spring.profiles.active", "");
+
+        log.info("\n----------------------------------------------------------\n" +
+                "  应用 '{}' 启动成功！\n" +
+                "  环境：{}\n" +
+                "  访问地址：\n" +
+                "    本地：http://localhost:{}{}\n" +
+                "    网络：http://{}:{}{}\n" +
+                "  API 文档：http://localhost:{}{}/doc.html\n" +
+                "----------------------------------------------------------",
+                env.getProperty("spring.application.name"),
+                activeProfile,
+                port, contextPath,
+                ip, port, contextPath,
+                port, contextPath);
+    }
+}

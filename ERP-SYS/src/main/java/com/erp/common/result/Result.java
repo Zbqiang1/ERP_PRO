@@ -1,0 +1,93 @@
+package com.erp.common.result;
+
+import lombok.Data;
+
+/**
+ * 统一返回结果封装
+ *
+ * 所有 Controller 的返回结果都使用此类进行包装，
+ * 确保前端接收到的数据格式一致。
+ *
+ * @param <T> 数据类型
+ * @author ERP Team
+ * @since 2026-06-29
+ */
+@Data
+public class Result<T> {
+
+    /** 状态码，200 表示成功 */
+    private Integer code;
+
+    /** 提示信息 */
+    private String message;
+
+    /** 返回数据 */
+    private T data;
+
+    /** 时间戳 */
+    private Long timestamp;
+
+    private Result() {
+        this.timestamp = System.currentTimeMillis();
+    }
+
+    // ==================== 成功返回 ====================
+
+    /** 成功返回（无数据） */
+    public static <T> Result<T> ok() {
+        return ok(null);
+    }
+
+    /** 成功返回（带数据） */
+    public static <T> Result<T> ok(T data) {
+        Result<T> result = new Result<>();
+        result.setCode(200);
+        result.setMessage("操作成功");
+        result.setData(data);
+        return result;
+    }
+
+    /** 成功返回（带自定义消息） */
+    public static <T> Result<T> ok(String message, T data) {
+        Result<T> result = new Result<>();
+        result.setCode(200);
+        result.setMessage(message);
+        result.setData(data);
+        return result;
+    }
+
+    // ==================== 失败返回 ====================
+
+    /** 失败返回（默认错误码 500） */
+    public static <T> Result<T> fail(String message) {
+        return fail(500, message);
+    }
+
+    /** 失败返回（自定义错误码） */
+    public static <T> Result<T> fail(Integer code, String message) {
+        Result<T> result = new Result<>();
+        result.setCode(code);
+        result.setMessage(message);
+        return result;
+    }
+
+    /** 参数校验失败 */
+    public static <T> Result<T> invalidParam(String message) {
+        return fail(400, message);
+    }
+
+    /** 未授权 */
+    public static <T> Result<T> unauthorized() {
+        return fail(401, "未登录或登录已过期");
+    }
+
+    /** 无权限 */
+    public static <T> Result<T> forbidden() {
+        return fail(403, "没有操作权限");
+    }
+
+    /** 资源不存在 */
+    public static <T> Result<T> notFound(String message) {
+        return fail(404, message);
+    }
+}

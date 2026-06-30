@@ -1,0 +1,83 @@
+version: '3.8'
+
+# ==================== ${projectName} 容器编排 ====================
+services:
+
+  # ==================== 应用服务 ====================
+  ${projectArtifactId}:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ${projectArtifactId}
+    ports:
+      - "${serverPort}:${serverPort}"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - mysql
+      - redis
+      # - rabbitmq
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # ==================== MySQL 数据库 ====================
+  mysql:
+    image: mysql:8.0
+    container_name: ${projectArtifactId}-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${mysqlPassword}
+      MYSQL_DATABASE: ${mysqlDatabase}
+      TZ: Asia/Shanghai
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+08:00
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d   # 初始化 SQL 脚本目录
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # ==================== Redis 缓存 ====================
+  redis:
+    image: redis:7-alpine
+    container_name: ${projectArtifactId}-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass ${redisPassword}
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # ==================== RabbitMQ 消息队列（按需取消注释） ====================
+  # rabbitmq:
+  #   image: rabbitmq:3.12-management-alpine
+  #   container_name: ${projectArtifactId}-rabbitmq
+  #   ports:
+  #     - "5672:5672"
+  #     - "15672:15672"
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: ${rabbitmqUser}
+  #     RABBITMQ_DEFAULT_PASS: ${rabbitmqPassword}
+  #   volumes:
+  #     - rabbitmq-data:/var/lib/rabbitmq
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+
+# ==================== 数据卷 ====================
+volumes:
+  mysql-data:
+  redis-data:
+  # rabbitmq-data:
+
+# ==================== 网络 ====================
+networks:
+  app-network:
+    driver: bridge

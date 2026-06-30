@@ -1,0 +1,73 @@
+# ==================== 开发环境配置 ====================
+
+spring:
+  # ==================== 数据源配置 ====================
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/erp_db?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true&createDatabaseIfNotExist=true
+    username: root
+    password: root
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+
+  # ==================== 自动初始化数据库表 ====================
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:init.sql
+      continue-on-error: true
+
+      # Druid 监控配置
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: admin
+        login-password: admin
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+
+  # ==================== Redis 配置 ====================
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 0
+    timeout: 3000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 8
+        min-idle: 0
+
+  # ==================== RabbitMQ 配置 ====================
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    # 消息确认模式：手动确认
+    listener:
+      simple:
+        acknowledge-mode: manual
+        prefetch: 1
+
+# ==================== 日志配置 ====================
+logging:
+  level:
+    com.erp: DEBUG
+    org.flowable: INFO
+    org.springframework.security: DEBUG

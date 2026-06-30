@@ -1,0 +1,131 @@
+package ${basePackage}.generator;
+
+import com.baomidou.mybatisplus.generator.FastAutoGenerator;
+import com.baomidou.mybatisplus.generator.config.OutputFile;
+import com.baomidou.mybatisplus.generator.config.rules.DateType;
+import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+
+import java.util.Collections;
+
+/**
+ * MyBatis-Plus 代码生成器
+ *
+ * 根据数据库表结构自动生成：
+ * - Entity（实体类）
+ * - Mapper（数据访问层）
+ * - Service（服务接口 + 实现类）
+ * - Controller（控制器）
+ *
+ * 使用方法：
+ * 1. 修改 DATABASE_URL、USERNAME、PASSWORD 为实际数据库信息
+ * 2. 在 includeTables 中填写要生成代码的表名
+ * 3. 运行 main 方法
+ *
+ * 注意：生成前请确保目标包下没有重名的文件，否则会被覆盖！
+ *
+ * @author {author}
+ * @since {date}
+ */
+public class CodeGenerator {
+
+    /** 数据库连接地址 */
+    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/${databaseName}?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai";
+
+    /** 数据库用户名 */
+    private static final String USERNAME = "root";
+
+    /** 数据库密码 */
+    private static final String PASSWORD = "root";
+
+    /** 基础包路径 */
+    private static final String BASE_PACKAGE = "${basePackage}";
+
+    /** 模块名（对应 modules 下的目录） */
+    private static final String MODULE_NAME = "system";
+
+    /** 输出路径 */
+    private static final String OUTPUT_DIR = System.getProperty("user.dir") + "/src/main/java";
+
+    /** XML 输出路径 */
+    private static final String XML_OUTPUT_DIR = System.getProperty("user.dir") + "/src/main/resources/mapper/" + MODULE_NAME;
+
+    /** 作者名 */
+    private static final String AUTHOR = "{author}";
+
+    /** 需要生成代码的表名（填写数据库表名） */
+    private static final String[] INCLUDE_TABLES = {
+        // "t_user",
+        // "t_role",
+        // "t_menu",
+    };
+
+    /**
+     * 启动代码生成器
+     */
+    public static void main(String[] args) {
+        FastAutoGenerator.create(DATABASE_URL, USERNAME, PASSWORD)
+                // ========== 全局配置 ==========
+                .globalConfig(builder -> builder
+                        .author(AUTHOR)                          // 作者
+                        .enableSwagger()                          // 开启 Swagger 注解
+                        .dateType(DateType.TIME_PACK)             // 使用 java.time 包下的日期类型
+                        .commentDate("yyyy-MM-dd")                // 注释日期格式
+                        .outputDir(OUTPUT_DIR)                    // 输出目录
+                        .disableOpenDir()                         // 生成后不打开目录
+                )
+                // ========== 包配置 ==========
+                .packageConfig(builder -> builder
+                        .parent(BASE_PACKAGE)                     // 父包名
+                        .moduleName(MODULE_NAME)                  // 模块名
+                        .entity("entity")                         // 实体类包名
+                        .mapper("mapper")                         // Mapper 包名
+                        .service("service")                       // Service 接口包名
+                        .serviceImpl("service.impl")              // Service 实现包名
+                        .controller("controller")                 // Controller 包名
+                        .pathInfo(Collections.singletonMap(
+                                OutputFile.xml, XML_OUTPUT_DIR    // XML 输出路径
+                        ))
+                )
+                // ========== 策略配置 ==========
+                .strategyConfig(builder -> builder
+                        .addInclude(INCLUDE_TABLES)               // 要生成的表
+                        // ---- Entity 策略 ----
+                        .entityBuilder()
+                        .enableLombok()                           // 使用 Lombok
+                        .enableTableFieldAnnotation()             // 生成字段注解
+                        .naming(NamingStrategy.underline_to_camel)// 表名→类名，下划线转驼峰
+                        .columnNaming(NamingStrategy.underline_to_camel) // 字段名→属性名
+                        .enableRemoveIsPrefix()                   // 移除 is_ 前缀
+                        .logicDeleteColumnName("deleted")         // 逻辑删除字段
+                        .logicDeletePropertyName("deleted")
+                        .formatFileName("%s")                     // 实体类名不加后缀
+                        // ---- Controller 策略 ----
+                        .controllerBuilder()
+                        .enableRestStyle()                        // RESTful 风格
+                        .formatFileName("%sController")
+                        // ---- Service 策略 ----
+                        .serviceBuilder()
+                        .formatServiceFileName("I%sService")      // 接口名：I{Entity}Service
+                        .formatServiceImplFileName("%sServiceImpl") // 实现类名
+                        // ---- Mapper 策略 ----
+                        .mapperBuilder()
+                        .enableBaseResultMap()                    // 生成 BaseResultMap
+                        .enableBaseColumnList()                   // 生成 BaseColumnList
+                        .formatMapperFileName("%sMapper")
+                        .formatXmlFileName("%sMapper")
+                )
+                // ========== 模板配置 ==========
+                .templateConfig(builder -> builder
+                        // 不需要生成 XML 中基本的 CRUD（MyBatis-Plus 已内置）
+                        // .disable(TemplateType.XML)
+                )
+                // 执行生成
+                .execute();
+
+        System.out.println("========================================");
+        System.out.println("  代码生成完成！");
+        System.out.println("  模块：" + MODULE_NAME);
+        System.out.println("  表：" + String.join(", ", INCLUDE_TABLES));
+        System.out.println("========================================");
+    }
+}

@@ -1,0 +1,58 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:skills.sh)",
+      "Bash(python .claude/skills/qiuzhi-skill-creator/scripts/init_skill.py spring-boot-2.7-generator --path .claude/skills)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(npm run *)",
+      "Bash(mvn compile *)",
+      "Bash(npm create *)",
+      "Bash(npm install *)",
+      "Bash(sed -i 's/private String soNo;/private Long soId;/g' sales/dto/SalesReturnQueryDTO.java)",
+      "Bash(sed -i 's/private String soNo;/private Long soId;/g' sales/dto/SalesDeliveryQueryDTO.java)",
+      "Bash(sed -i 's/private String poNo;/private Long poId;/g' purchase/dto/IqcInspectionQueryDTO.java)",
+      "Bash(sed -i 's/private String deptName;/private Long deptId;/g' purchase/dto/PurchaseRequestQueryDTO.java)",
+      "Bash(sed -i 's/private String applicant;/private Long applicantId;/g' purchase/dto/PurchaseRequestQueryDTO.java)",
+      "Bash(sleep 8 && cat /c/Users/Administrator/AppData/Local/Temp/claude/f--Projects-ERP-PRO/00d269bb-a79d-4def-b838-de267bb82cfb/tasks/bc0uen6nu.output 2>/dev/null | head -60)",
+      "Read(//c/Users/Administrator/AppData/Local/Temp/claude/f--Projects-ERP-PRO/00d269bb-a79d-4def-b838-de267bb82cfb/tasks/**)",
+      "Bash(npx vite *)",
+      "Bash(sed -i 's/`user_id` BIGINT NOT NULL COMMENT/`user_id` VARCHAR\\(64\\) NOT NULL COMMENT/g' init.sql)",
+      "Bash(sed -i 's/`user_id` BIGINT DEFAULT NULL COMMENT/`user_id` VARCHAR\\(64\\) DEFAULT NULL COMMENT/g' init.sql)",
+      "Bash(sed -i 's/`create_by` BIGINT DEFAULT NULL COMMENT/`create_by` VARCHAR\\(64\\) DEFAULT NULL COMMENT/g' init.sql)",
+      "Bash(sed -i 's/`update_by` BIGINT DEFAULT NULL COMMENT/`update_by` VARCHAR\\(64\\) DEFAULT NULL COMMENT/g' init.sql)",
+      "Bash(sed -i 's/`applicant_id` BIGINT/`applicant_id` VARCHAR\\(64\\)/g' init.sql)",
+      "Bash(timeout 30 mvn spring-boot:run)",
+      "Bash(mvn spring-boot:run)",
+      "Bash(curl -s -X POST http://localhost:8080/api/auth/login -H \"Content-Type: application/json\" -d '{\"username\":\"admin\",\"password\":\"123456\"}')",
+      "Bash(npx skills *)",
+      "Bash(curl -sI https://github.com)",
+      "Bash(curl -sI https://ghproxy.com)",
+      "Bash(git ls-remote *)",
+      "Bash(curl -s -X POST http://localhost:8080/api/auth/login -H 'Content-Type: application/json' -d '{\"username\":\"admin\",\"password\":\"123456\"}')",
+      "Bash(curl -s http://localhost:8080/api/auth/info -H \"Authorization: Bearer $\\(curl -s -X POST http://localhost:8080/api/auth/login -H 'Content-Type: application/json' -d '{\"username\":\"admin\",\"password\":\"123456\"}')",
+      "Bash(xargs sed -i \"s|from '@/components/FormDialog.vue'|from '@/components/common/FormDialog.vue'|g\")",
+      "Bash(xargs sed -i \"s|from '@/components/Pagination.vue'|from '@/components/common/Pagination.vue'|g\")",
+      "Bash(xargs sed -i \"s|from '@/components/TablePanel.vue'|from '@/components/common/TablePanel.vue'|g\")",
+      "Bash(grep -v \"//\")",
+      "Bash(tail -40 /c/Users/Administrator/.claude/projects/f--Projects-ERP-PRO/00d269bb-a79d-4def-b838-de267bb82cfb/tool-results/bac73xrho.txt)",
+      "Read(//c/Users/Administrator/.claude/projects/f--Projects-ERP-PRO/00d269bb-a79d-4def-b838-de267bb82cfb/tool-results/**)",
+      "Bash(mvn spring-boot:run -q)",
+      "Bash(echo \"PID=$!\")",
+      "Bash(echo 'eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsInN1YiI6ImFkbWluIiwiaWF0IjoxNzgyODIwMDgwLCJleHAiOjE3ODI4MjcyODB9.C0fHBLo2gcxTt6merkw4ObluycVc61atm6Y8I9kSYt4' > /tmp/erp_token.txt)",
+      "Read(//tmp/**)",
+      "Bash(echo \"=== Raw response samples ===\")",
+      "Bash(echo \"--- /api/users?page=1&size=5 ---\")",
+      "Bash(timeout 10 curl -s '__TRACKED_VAR__/api/users?page=1&size=5' -H 'Authorization: Bearer __CMDSUB_OUTPUT__')",
+      "Bash(echo \"\")",
+      "Bash(git init *)"
+    ],
+    "additionalDirectories": [
+      "\\tmp"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "github"
+  ]
+}
