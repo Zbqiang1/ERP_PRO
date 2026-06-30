@@ -29,7 +29,11 @@ public class MrpController {
     /** 根据ID查询 */
     @GetMapping("/{id}")
     public Result<MrpResult> getById(@PathVariable Long id) {
-        return Result.ok(mrpResultService.getById(id));
+        MrpResult entity = mrpResultService.getById(id);
+        if (entity == null) {
+            return Result.notFound("MRP结果不存在");
+        }
+        return Result.ok(entity);
     }
 
     /** 新增 */
@@ -47,6 +51,9 @@ public class MrpController {
     /** 删除 */
     @DeleteMapping("/{id}")
     public Result<Boolean> delete(@PathVariable Long id) {
-        return Result.ok(mrpResultService.removeById(id));
+        if (!mrpResultService.removeById(id)) {
+            return Result.notFound("MRP结果不存在");
+        }
+        return Result.ok(true);
     }
 }

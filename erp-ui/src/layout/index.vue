@@ -11,30 +11,21 @@ const isCollapsed = computed(() => appStore.sidebarCollapsed)
 
 <template>
   <el-container class="layout-container">
-    <!-- 左侧边栏 -->
     <el-aside :width="isCollapsed ? '64px' : '220px'" class="layout-aside">
       <Sidebar />
     </el-aside>
 
-    <!-- 右侧主体 -->
     <el-container class="layout-main">
-      <!-- 顶部导航 -->
       <el-header height="56px" class="layout-header">
         <Navbar />
       </el-header>
 
-      <!-- 标签页 -->
       <div class="layout-tags">
         <TagsView />
       </div>
 
-      <!-- 主内容区域 -->
       <el-main class="layout-content">
-        <router-view v-slot="{ Component, route }">
-          <keep-alive :include="cachedViews">
-            <component :is="Component" :key="route.path" />
-          </keep-alive>
-        </router-view>
+        <router-view />
       </el-main>
     </el-container>
   </el-container>

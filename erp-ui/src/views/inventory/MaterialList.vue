@@ -72,7 +72,7 @@
       </div>
     </el-card>
 
-    <MaterialFormDialog
+    <FormDialog
       v-model="dialogVisible"
       :title="dialogTitle"
       :mode="dialogMode"
@@ -88,7 +88,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { materialPage, materialAdd, materialUpdate, materialDelete, materialGetById } from '@/api/modules/inventory'
 import { listCategoryOptions } from '@/api/modules/inventory'
-import MaterialFormDialog from './components/MaterialFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ materialCode: '', materialName: '', categoryId: null, status: null })

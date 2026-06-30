@@ -28,9 +28,11 @@ public class TransferOrderServiceImpl extends ServiceImpl<TransferOrderMapper, T
             if (StringUtils.hasText(dto.getKeyword())) {
                 wrapper.and(w -> w.like(TransferOrder::getTransferNo, dto.getKeyword()));
             }
-            if (dto.getStatus() != null) {
-                wrapper.eq(TransferOrder::getStatus, dto.getStatus());
+            Integer statusInt = null;
+            if (dto.getStatus() != null && !dto.getStatus().isEmpty()) {
+                try { statusInt = Integer.valueOf(dto.getStatus()); } catch (NumberFormatException e) { }
             }
+            wrapper.eq(statusInt != null, TransferOrder::getStatus, statusInt);
         }
         wrapper.orderByDesc(TransferOrder::getCreateTime);
         int page = (dto != null && dto.getPage() != null) ? dto.getPage() : 1;

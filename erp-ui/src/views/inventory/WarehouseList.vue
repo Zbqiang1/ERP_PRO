@@ -79,7 +79,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { warehousePage, warehouseAdd, warehouseUpdate, warehouseDelete, warehouseGetById } from '@/api/modules/inventory'
-import FormDialog from './components/WarehouseFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ warehouseCode: '', warehouseName: '' })

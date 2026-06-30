@@ -31,7 +31,11 @@ public class SalesReturnServiceImpl extends ServiceImpl<SalesReturnMapper, Sales
         wrapper.like(StringUtils.hasText(queryDTO.getReturnNo()), SalesReturn::getReturnNo, queryDTO.getReturnNo());
         wrapper.eq(queryDTO.getSoId() != null, SalesReturn::getSoId, queryDTO.getSoId());
         wrapper.like(StringUtils.hasText(queryDTO.getCustomerName()), SalesReturn::getCustomerName, queryDTO.getCustomerName());
-        wrapper.eq(queryDTO.getStatus() != null, SalesReturn::getStatus, queryDTO.getStatus());
+        Integer statusInt = null;
+        if (queryDTO.getStatus() != null && !queryDTO.getStatus().isEmpty()) {
+            try { statusInt = Integer.valueOf(queryDTO.getStatus()); } catch (NumberFormatException e) { }
+        }
+        wrapper.eq(statusInt != null, SalesReturn::getStatus, statusInt);
         wrapper.orderByDesc(SalesReturn::getCreateTime);
         Page<SalesReturn> resultPage = this.page(page, wrapper);
         Page<SalesReturnVO> voPage = new Page<>(resultPage.getCurrent(), resultPage.getSize(), resultPage.getTotal());

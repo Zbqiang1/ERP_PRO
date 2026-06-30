@@ -67,7 +67,7 @@
       </div>
     </el-card>
 
-    <EmployeeFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" :org-options="orgOptions" @confirm="handleSave"
     />
@@ -79,7 +79,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { employeePage, employeeAdd, employeeUpdate, employeeDelete, employeeGetById } from '@/api/modules/hr'
 import { organizationListAll } from '@/api/modules/hr'
-import EmployeeFormDialog from './components/EmployeeFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ employeeNo: '', realName: '', orgId: null, status: '' })

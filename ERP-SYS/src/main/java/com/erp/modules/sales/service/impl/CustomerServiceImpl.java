@@ -30,7 +30,11 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         LambdaQueryWrapper<Customer> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(StringUtils.hasText(queryDTO.getCustomerCode()), Customer::getCustomerCode, queryDTO.getCustomerCode());
         wrapper.like(StringUtils.hasText(queryDTO.getCustomerName()), Customer::getCustomerName, queryDTO.getCustomerName());
-        wrapper.eq(queryDTO.getStatus() != null, Customer::getStatus, queryDTO.getStatus());
+        Integer statusInt = null;
+        if (queryDTO.getStatus() != null && !queryDTO.getStatus().isEmpty()) {
+            try { statusInt = Integer.valueOf(queryDTO.getStatus()); } catch (NumberFormatException e) { }
+        }
+        wrapper.eq(statusInt != null, Customer::getStatus, statusInt);
         wrapper.orderByDesc(Customer::getCreateTime);
         Page<Customer> resultPage = this.page(page, wrapper);
         Page<CustomerVO> voPage = new Page<>(resultPage.getCurrent(), resultPage.getSize(), resultPage.getTotal());

@@ -29,7 +29,11 @@ public class MpsController {
     /** 根据ID查询 */
     @GetMapping("/{id}")
     public Result<MpsPlan> getById(@PathVariable Long id) {
-        return Result.ok(mpsPlanService.getById(id));
+        MpsPlan entity = mpsPlanService.getById(id);
+        if (entity == null) {
+            return Result.notFound("主生产计划不存在");
+        }
+        return Result.ok(entity);
     }
 
     /** 新增 */
@@ -47,6 +51,9 @@ public class MpsController {
     /** 删除 */
     @DeleteMapping("/{id}")
     public Result<Boolean> delete(@PathVariable Long id) {
-        return Result.ok(mpsPlanService.removeById(id));
+        if (!mpsPlanService.removeById(id)) {
+            return Result.notFound("主生产计划不存在");
+        }
+        return Result.ok(true);
     }
 }

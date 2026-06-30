@@ -30,7 +30,11 @@ public class PurchaseReturnServiceImpl extends ServiceImpl<PurchaseReturnMapper,
         LambdaQueryWrapper<PurchaseReturn> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(StringUtils.hasText(queryDTO.getReturnNo()), PurchaseReturn::getReturnNo, queryDTO.getReturnNo());
         wrapper.like(StringUtils.hasText(queryDTO.getSupplierName()), PurchaseReturn::getSupplierName, queryDTO.getSupplierName());
-        wrapper.eq(queryDTO.getStatus() != null, PurchaseReturn::getStatus, queryDTO.getStatus());
+        Integer statusInt = null;
+        if (queryDTO.getStatus() != null && !queryDTO.getStatus().isEmpty()) {
+            try { statusInt = Integer.valueOf(queryDTO.getStatus()); } catch (NumberFormatException e) { }
+        }
+        wrapper.eq(statusInt != null, PurchaseReturn::getStatus, statusInt);
         wrapper.orderByDesc(PurchaseReturn::getCreateTime);
         Page<PurchaseReturn> resultPage = this.page(page, wrapper);
         Page<PurchaseReturnVO> voPage = new Page<>(resultPage.getCurrent(), resultPage.getSize(), resultPage.getTotal());

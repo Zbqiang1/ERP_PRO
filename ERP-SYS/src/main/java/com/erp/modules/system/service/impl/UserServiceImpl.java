@@ -87,12 +87,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public IPage<UserVO> pageUser(UserQueryDTO queryDTO) {
-        Page<User> page = new Page<>(queryDTO.getPage(), queryDTO.getSize());
+        long current = queryDTO.getPage() != null ? queryDTO.getPage() : 1L;
+        long pageSize = queryDTO.getSize() != null ? queryDTO.getSize() : 10L;
+        Page<User> page = new Page<>(current, pageSize);
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(StringUtils.hasText(queryDTO.getUsername()), User::getUsername, queryDTO.getUsername())
                 .like(StringUtils.hasText(queryDTO.getRealName()), User::getRealName, queryDTO.getRealName())
-                .like(StringUtils.hasText(queryDTO.getPhone()), User::getPhone, queryDTO.getPhone())
-                .eq(queryDTO.getStatus() != null, User::getStatus, queryDTO.getStatus())
+                .like(StringUtils.hasText(queryDTO.getPhone()), User::getPhone, queryDTO.getPhone());
+        Integer statusInt = null;
+        if (queryDTO.getStatus() != null && !queryDTO.getStatus().isEmpty()) {
+            try { statusInt = Integer.valueOf(queryDTO.getStatus()); } catch (NumberFormatException e) { }
+        }
+        wrapper.eq(statusInt != null, User::getStatus, statusInt)
                 .eq(queryDTO.getDeptId() != null, User::getDeptId, queryDTO.getDeptId())
                 .orderByDesc(User::getCreateTime);
         IPage<User> userPage = userMapper.selectPage(page, wrapper);

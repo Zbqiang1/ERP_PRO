@@ -53,6 +53,7 @@ public class LeaveSheetController {
      */
     @PutMapping("/{id}")
     public Result<Void> update(@PathVariable Long id, @Valid @RequestBody LeaveSheetDTO dto) {
+        dto.setId(id);
         leaveSheetService.update(dto);
         return Result.ok();
     }

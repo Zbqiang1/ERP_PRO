@@ -43,7 +43,11 @@ public class PurchaseRequestServiceImpl extends ServiceImpl<PurchaseRequestMappe
                 queryDTO.getSize() != null ? queryDTO.getSize() : 10);
         LambdaQueryWrapper<PurchaseRequest> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(StringUtils.hasText(queryDTO.getPrNo()), PurchaseRequest::getPrNo, queryDTO.getPrNo());
-        wrapper.eq(queryDTO.getStatus() != null, PurchaseRequest::getStatus, queryDTO.getStatus());
+        Integer statusInt = null;
+        if (queryDTO.getStatus() != null && !queryDTO.getStatus().isEmpty()) {
+            try { statusInt = Integer.valueOf(queryDTO.getStatus()); } catch (NumberFormatException e) { }
+        }
+        wrapper.eq(statusInt != null, PurchaseRequest::getStatus, statusInt);
         wrapper.orderByDesc(PurchaseRequest::getCreateTime);
         Page<PurchaseRequest> resultPage = this.page(page, wrapper);
         Page<PurchaseRequestVO> voPage = new Page<>(resultPage.getCurrent(), resultPage.getSize(), resultPage.getTotal());

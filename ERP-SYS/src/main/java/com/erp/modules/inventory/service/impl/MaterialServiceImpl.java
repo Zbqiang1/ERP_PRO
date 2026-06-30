@@ -31,9 +31,11 @@ public class MaterialServiceImpl extends ServiceImpl<MaterialMapper, Material> i
                         .or().like(Material::getCategoryName, dto.getKeyword())
                         .or().like(Material::getSpec, dto.getKeyword()));
             }
-            if (dto.getStatus() != null) {
-                wrapper.eq(Material::getStatus, dto.getStatus());
+            Integer statusInt = null;
+            if (dto.getStatus() != null && !dto.getStatus().isEmpty()) {
+                try { statusInt = Integer.valueOf(dto.getStatus()); } catch (NumberFormatException e) { }
             }
+            wrapper.eq(statusInt != null, Material::getStatus, statusInt);
         }
         wrapper.orderByDesc(Material::getCreateTime);
         int page = (dto != null && dto.getPage() != null) ? dto.getPage() : 1;

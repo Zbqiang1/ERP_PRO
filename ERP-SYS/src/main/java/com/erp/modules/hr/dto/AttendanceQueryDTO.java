@@ -22,7 +22,7 @@ public class AttendanceQueryDTO implements Serializable {
     private String attendanceDateEnd;
 
     /** 状态 */
-    private Integer status;
+    private String status;
 
     /** 当前页码 */
     private Long page;

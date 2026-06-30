@@ -31,7 +31,11 @@ public class SalesDeliveryServiceImpl extends ServiceImpl<SalesDeliveryMapper, S
         wrapper.like(StringUtils.hasText(queryDTO.getDeliveryNo()), SalesDelivery::getDeliveryNo, queryDTO.getDeliveryNo());
         wrapper.eq(queryDTO.getSoId() != null, SalesDelivery::getSoId, queryDTO.getSoId());
         wrapper.like(StringUtils.hasText(queryDTO.getCustomerName()), SalesDelivery::getCustomerName, queryDTO.getCustomerName());
-        wrapper.eq(queryDTO.getStatus() != null, SalesDelivery::getStatus, queryDTO.getStatus());
+        Integer statusInt = null;
+        if (queryDTO.getStatus() != null && !queryDTO.getStatus().isEmpty()) {
+            try { statusInt = Integer.valueOf(queryDTO.getStatus()); } catch (NumberFormatException e) { }
+        }
+        wrapper.eq(statusInt != null, SalesDelivery::getStatus, statusInt);
         wrapper.orderByDesc(SalesDelivery::getCreateTime);
         Page<SalesDelivery> resultPage = this.page(page, wrapper);
         Page<SalesDeliveryVO> voPage = new Page<>(resultPage.getCurrent(), resultPage.getSize(), resultPage.getTotal());

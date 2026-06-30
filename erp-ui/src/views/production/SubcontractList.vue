@@ -65,7 +65,7 @@
       </div>
     </el-card>
 
-    <SubcontractFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" :supplier-options="supplierOptions" @confirm="handleSave"
     />
@@ -77,7 +77,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { subcontractPage, subcontractAdd, subcontractUpdate, subcontractDelete, subcontractGetById } from '@/api/modules/production'
 import { supplierListAll } from '@/api/modules/supplier'
-import SubcontractFormDialog from './components/SubcontractFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ contractNo: '', supplierId: null, status: '' })

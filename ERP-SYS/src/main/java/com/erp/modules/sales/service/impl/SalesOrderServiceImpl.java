@@ -43,7 +43,11 @@ public class SalesOrderServiceImpl extends ServiceImpl<SalesOrderMapper, SalesOr
         LambdaQueryWrapper<SalesOrder> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(StringUtils.hasText(queryDTO.getSoNo()), SalesOrder::getSoNo, queryDTO.getSoNo());
         wrapper.like(StringUtils.hasText(queryDTO.getCustomerName()), SalesOrder::getCustomerName, queryDTO.getCustomerName());
-        wrapper.eq(queryDTO.getStatus() != null, SalesOrder::getStatus, queryDTO.getStatus());
+        Integer statusInt = null;
+        if (queryDTO.getStatus() != null && !queryDTO.getStatus().isEmpty()) {
+            try { statusInt = Integer.valueOf(queryDTO.getStatus()); } catch (NumberFormatException e) { }
+        }
+        wrapper.eq(statusInt != null, SalesOrder::getStatus, statusInt);
         wrapper.orderByDesc(SalesOrder::getCreateTime);
         Page<SalesOrder> resultPage = this.page(page, wrapper);
         Page<SalesOrderVO> voPage = new Page<>(resultPage.getCurrent(), resultPage.getSize(), resultPage.getTotal());

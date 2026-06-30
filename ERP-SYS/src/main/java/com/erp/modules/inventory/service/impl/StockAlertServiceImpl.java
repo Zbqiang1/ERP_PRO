@@ -28,9 +28,11 @@ public class StockAlertServiceImpl extends ServiceImpl<StockAlertMapper, StockAl
             if (StringUtils.hasText(dto.getKeyword())) {
                 wrapper.like(StockAlert::getAlertNo, dto.getKeyword());
             }
-            if (dto.getStatus() != null) {
-                wrapper.eq(StockAlert::getStatus, dto.getStatus());
+            Integer statusInt = null;
+            if (dto.getStatus() != null && !dto.getStatus().isEmpty()) {
+                try { statusInt = Integer.valueOf(dto.getStatus()); } catch (NumberFormatException e) { }
             }
+            wrapper.eq(statusInt != null, StockAlert::getStatus, statusInt);
             if (StringUtils.hasText(dto.getStartDate())) {
                 wrapper.ge(StockAlert::getAlertDate, dto.getStartDate());
             }

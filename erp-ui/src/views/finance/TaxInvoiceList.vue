@@ -71,7 +71,7 @@
       </div>
     </el-card>
 
-    <TaxInvoiceFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" @confirm="handleSave"
     />
@@ -82,7 +82,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { taxInvoicePage, taxInvoiceAdd, taxInvoiceUpdate, taxInvoiceDelete, taxInvoiceGetById } from '@/api/modules/finance'
-import TaxInvoiceFormDialog from './components/TaxInvoiceFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ invoiceNo: '', invoiceType: '', invoiceDateRange: [] })

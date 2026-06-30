@@ -1,38 +1,34 @@
 <script setup>
 import { computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useAppStore } from '@/stores/app'
 import { usePermissionStore } from '@/stores/permission'
 
 const route = useRoute()
-const router = useRouter()
 const appStore = useAppStore()
 const permissionStore = usePermissionStore()
 
 const isCollapsed = computed(() => appStore.sidebarCollapsed)
 
-// 菜单数据：从动态路由中提取 Layout 的 children
+// 菜单数据：直接从 permission store 的原始菜单生成（响应式）
 const menuList = computed(() => {
-  const layoutRoute = router.getRoutes().find((r) => r.name === 'Layout')
-  if (!layoutRoute || !layoutRoute.children) return []
-  return layoutRoute.children
-    .filter((r) => !r.meta?.hidden)
-    .sort((a, b) => (a.meta?.orderNo || 0) - (b.meta?.orderNo || 0))
-    .map((r) => ({
-      path: r.path,
-      name: r.name,
-      title: r.meta?.title || r.name || '',
-      icon: r.meta?.icon || '',
-      children: (r.children || [])
-        .filter((c) => !c.meta?.hidden)
+  const menus = permissionStore.menus || []
+  return menus
+    .filter((m) => m.menuType === 0) // 只取目录类型（一级菜单）
+    .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
+    .map((m) => ({
+      path: m.path,
+      title: m.menuName,
+      icon: m.icon,
+      children: (m.children || [])
+        .filter((c) => c.menuType === 1) // 只取菜单类型（排除按钮）
+        .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
         .map((c) => ({
           path: c.path,
-          name: c.name,
-          title: c.meta?.title || c.name || '',
-          icon: c.meta?.icon || ''
+          title: c.menuName,
+          icon: c.icon
         }))
     }))
-    .filter((m) => !m.meta?.hidden)
 })
 
 const activeMenu = computed(() => {
@@ -82,7 +78,7 @@ function handleSelect(index) {
             <el-menu-item
               v-for="child in menu.children"
               :key="child.path"
-              :index="menu.path + '/' + child.path"
+              :index="child.path"
             >
               <el-icon v-if="child.icon">
                 <component :is="child.icon" />

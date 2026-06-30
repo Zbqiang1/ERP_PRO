@@ -30,9 +30,11 @@ public class FixedAssetServiceImpl extends ServiceImpl<FixedAssetMapper, FixedAs
                         .or().like(FixedAsset::getAssetName, dto.getKeyword())
                         .or().like(FixedAsset::getCategory, dto.getKeyword()));
             }
-            if (dto.getStatus() != null) {
-                wrapper.eq(FixedAsset::getStatus, dto.getStatus());
+            Integer statusInt = null;
+            if (dto.getStatus() != null && !dto.getStatus().isEmpty()) {
+                try { statusInt = Integer.valueOf(dto.getStatus()); } catch (NumberFormatException e) { }
             }
+            wrapper.eq(statusInt != null, FixedAsset::getStatus, statusInt);
         }
         wrapper.orderByDesc(FixedAsset::getCreateTime);
         int page = (dto != null && dto.getPage() != null) ? dto.getPage() : 1;

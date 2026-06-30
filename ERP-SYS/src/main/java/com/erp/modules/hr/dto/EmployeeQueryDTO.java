@@ -25,7 +25,7 @@ public class EmployeeQueryDTO implements Serializable {
     private Long orgId;
 
     /** 状态（0-在职 1-离职 2-实习） */
-    private Integer status;
+    private String status;
 
     /** 当前页码 */
     private Long page;

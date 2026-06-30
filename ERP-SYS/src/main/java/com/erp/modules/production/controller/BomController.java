@@ -35,7 +35,11 @@ public class BomController {
     /** 根据ID查询BOM表头 */
     @GetMapping("/{id}")
     public Result<BomHeader> getById(@PathVariable Long id) {
-        return Result.ok(bomHeaderService.getById(id));
+        BomHeader entity = bomHeaderService.getById(id);
+        if (entity == null) {
+            return Result.notFound("BOM表头不存在");
+        }
+        return Result.ok(entity);
     }
 
     /** 新增BOM表头 */
@@ -53,7 +57,10 @@ public class BomController {
     /** 删除BOM表头 */
     @DeleteMapping("/{id}")
     public Result<Boolean> delete(@PathVariable Long id) {
-        return Result.ok(bomHeaderService.removeById(id));
+        if (!bomHeaderService.removeById(id)) {
+            return Result.notFound("BOM表头不存在");
+        }
+        return Result.ok(true);
     }
 
     // ==================== 明细 ====================

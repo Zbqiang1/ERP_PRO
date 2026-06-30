@@ -61,7 +61,7 @@
       </div>
     </el-card>
 
-    <PerformanceFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" :employee-options="employeeOptions" @confirm="handleSave"
     />
@@ -87,7 +87,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { performancePage, performanceAdd, performanceUpdate, performanceDelete, performanceGetById, performanceHistoryByEmployee } from '@/api/modules/hr'
 import { employeeListAll } from '@/api/modules/hr'
-import PerformanceFormDialog from './components/PerformanceFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ employeeId: null, assessmentPeriod: '', grade: '' })

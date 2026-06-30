@@ -29,7 +29,11 @@ public class ProdInspectionController {
     /** 根据ID查询 */
     @GetMapping("/{id}")
     public Result<ProdInspection> getById(@PathVariable Long id) {
-        return Result.ok(inspectionService.getById(id));
+        ProdInspection entity = inspectionService.getById(id);
+        if (entity == null) {
+            return Result.notFound("生产检验记录不存在");
+        }
+        return Result.ok(entity);
     }
 
     /** 新增 */
@@ -47,6 +51,9 @@ public class ProdInspectionController {
     /** 删除 */
     @DeleteMapping("/{id}")
     public Result<Boolean> delete(@PathVariable Long id) {
-        return Result.ok(inspectionService.removeById(id));
+        if (!inspectionService.removeById(id)) {
+            return Result.notFound("生产检验记录不存在");
+        }
+        return Result.ok(true);
     }
 }

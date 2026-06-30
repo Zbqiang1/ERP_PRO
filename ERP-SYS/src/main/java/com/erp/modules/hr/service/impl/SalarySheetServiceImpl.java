@@ -61,17 +61,22 @@ public class SalarySheetServiceImpl extends ServiceImpl<SalarySheetMapper, Salar
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(SalarySheetDTO dto) {
-        SalarySheet salary = new SalarySheet();
-        BeanUtils.copyProperties(dto, salary);
-        BigDecimal netSalary = calNetSalary(salary);
-        salary.setNetSalary(netSalary);
-        this.updateById(salary);
+        SalarySheet existing = this.getById(dto.getId());
+        if (existing == null) {
+            throw new BusinessException("工资单不存在");
+        }
+        BeanUtils.copyProperties(dto, existing);
+        BigDecimal netSalary = calNetSalary(existing);
+        existing.setNetSalary(netSalary);
+        this.updateById(existing);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        this.removeById(id);
+        if (!this.removeById(id)) {
+            throw new BusinessException("工资单不存在");
+        }
     }
 
     /**

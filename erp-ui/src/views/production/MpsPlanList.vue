@@ -67,7 +67,7 @@
       </div>
     </el-card>
 
-    <MpsPlanFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" @confirm="handleSave"
     />
@@ -78,7 +78,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { mpsPlanPage, mpsPlanAdd, mpsPlanUpdate, mpsPlanDelete, mpsPlanGetById } from '@/api/modules/production'
-import MpsPlanFormDialog from './components/MpsPlanFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ planNo: '', planMonth: '', status: '' })

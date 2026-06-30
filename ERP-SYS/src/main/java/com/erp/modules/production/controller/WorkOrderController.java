@@ -35,7 +35,11 @@ public class WorkOrderController {
     /** 根据ID查询工单 */
     @GetMapping("/{id}")
     public Result<WorkOrder> getById(@PathVariable Long id) {
-        return Result.ok(workOrderService.getById(id));
+        WorkOrder entity = workOrderService.getById(id);
+        if (entity == null) {
+            return Result.notFound("工单不存在");
+        }
+        return Result.ok(entity);
     }
 
     /** 新增工单 */
@@ -53,7 +57,10 @@ public class WorkOrderController {
     /** 删除工单 */
     @DeleteMapping("/{id}")
     public Result<Boolean> delete(@PathVariable Long id) {
-        return Result.ok(workOrderService.removeById(id));
+        if (!workOrderService.removeById(id)) {
+            return Result.notFound("工单不存在");
+        }
+        return Result.ok(true);
     }
 
     // ==================== 工艺路线 ====================

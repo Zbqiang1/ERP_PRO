@@ -28,9 +28,11 @@ public class InventoryCheckServiceImpl extends ServiceImpl<InventoryCheckMapper,
             if (StringUtils.hasText(dto.getKeyword())) {
                 wrapper.and(w -> w.like(InventoryCheck::getCheckNo, dto.getKeyword()));
             }
-            if (dto.getStatus() != null) {
-                wrapper.eq(InventoryCheck::getStatus, dto.getStatus());
+            Integer statusInt = null;
+            if (dto.getStatus() != null && !dto.getStatus().isEmpty()) {
+                try { statusInt = Integer.valueOf(dto.getStatus()); } catch (NumberFormatException e) { }
             }
+            wrapper.eq(statusInt != null, InventoryCheck::getStatus, statusInt);
             if (StringUtils.hasText(dto.getStartDate())) {
                 wrapper.ge(InventoryCheck::getCheckDate, dto.getStartDate());
             }

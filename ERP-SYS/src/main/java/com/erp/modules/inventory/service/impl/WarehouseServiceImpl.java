@@ -29,9 +29,11 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
                 wrapper.and(w -> w.like(Warehouse::getWarehouseCode, dto.getKeyword())
                         .or().like(Warehouse::getWarehouseName, dto.getKeyword()));
             }
-            if (dto.getStatus() != null) {
-                wrapper.eq(Warehouse::getStatus, dto.getStatus());
+            Integer statusInt = null;
+            if (dto.getStatus() != null && !dto.getStatus().isEmpty()) {
+                try { statusInt = Integer.valueOf(dto.getStatus()); } catch (NumberFormatException e) { }
             }
+            wrapper.eq(statusInt != null, Warehouse::getStatus, statusInt);
         }
         wrapper.orderByDesc(Warehouse::getCreateTime);
         int page = (dto != null && dto.getPage() != null) ? dto.getPage() : 1;

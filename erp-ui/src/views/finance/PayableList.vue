@@ -94,7 +94,7 @@
       </template>
     </el-dialog>
 
-    <PayableFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" :supplier-options="supplierOptions" @confirm="handleSave"
     />
@@ -106,7 +106,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { payablePage, payableAdd, payableUpdate, payableDelete, payableGetById, payablePay } from '@/api/modules/finance'
 import { supplierListAll } from '@/api/modules/supplier'
-import PayableFormDialog from './components/PayableFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ payableNo: '', supplierId: null, status: '' })

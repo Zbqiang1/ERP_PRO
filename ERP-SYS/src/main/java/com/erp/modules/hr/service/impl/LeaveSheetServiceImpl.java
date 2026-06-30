@@ -32,7 +32,11 @@ public class LeaveSheetServiceImpl extends ServiceImpl<LeaveSheetMapper, LeaveSh
         LambdaQueryWrapper<LeaveSheet> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(StringUtils.hasText(queryDTO.getLeaveNo()), LeaveSheet::getLeaveNo, queryDTO.getLeaveNo());
         wrapper.eq(queryDTO.getLeaveType() != null, LeaveSheet::getLeaveType, queryDTO.getLeaveType());
-        wrapper.eq(queryDTO.getStatus() != null, LeaveSheet::getStatus, queryDTO.getStatus());
+        Integer statusInt = null;
+        if (queryDTO.getStatus() != null && !queryDTO.getStatus().isEmpty()) {
+            try { statusInt = Integer.valueOf(queryDTO.getStatus()); } catch (NumberFormatException e) { }
+        }
+        wrapper.eq(statusInt != null, LeaveSheet::getStatus, statusInt);
         wrapper.orderByDesc(LeaveSheet::getCreateTime);
         Page<LeaveSheet> resultPage = this.page(page, wrapper);
         Page<LeaveSheetVO> voPage = new Page<>(resultPage.getCurrent(), resultPage.getSize(), resultPage.getTotal());
@@ -65,15 +69,20 @@ public class LeaveSheetServiceImpl extends ServiceImpl<LeaveSheetMapper, LeaveSh
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(LeaveSheetDTO dto) {
-        LeaveSheet leave = new LeaveSheet();
-        BeanUtils.copyProperties(dto, leave);
-        this.updateById(leave);
+        LeaveSheet existing = this.getById(dto.getId());
+        if (existing == null) {
+            throw new BusinessException("请假单不存在");
+        }
+        BeanUtils.copyProperties(dto, existing);
+        this.updateById(existing);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        this.removeById(id);
+        if (!this.removeById(id)) {
+            throw new BusinessException("请假单不存在");
+        }
     }
 
     @Override

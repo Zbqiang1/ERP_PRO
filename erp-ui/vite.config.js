@@ -11,6 +11,8 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    // SPA 回退：所有非 /api 路由返回 index.html
+    historyApiFallback: true,
     proxy: {
       '/api': {
         target: 'http://localhost:8080',

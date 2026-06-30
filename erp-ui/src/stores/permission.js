@@ -50,6 +50,20 @@ const componentMap = {
   'dashboard/ErpDashboard': () => import('@/views/dashboard/ErpDashboard.vue')
 }
 
+// 根据 path 和菜单名推断组件路径
+function guessComponent(path, menuName) {
+  if (!path) return null
+  // /system/user → system/UserList
+  const parts = path.replace(/^\//, '').split('/')
+  if (parts.length === 2) {
+    const module = parts[0]          // system
+    const page = parts[1]            // user
+    const pageName = page.charAt(0).toUpperCase() + page.slice(1) + 'List'  // UserList
+    return `${module}/${pageName}`
+  }
+  return null
+}
+
 // 将后端菜单数据转换为 Vue Router 路由格式
 // 后端 MenuVO 字段: menuName, menuType, path, component, icon, sortOrder, permissionCode, visible, children
 function convertMenusToRoutes(menus) {
@@ -74,12 +88,22 @@ function convertMenusToRoutes(menus) {
       }
     }
     // 菜单类型(menuType=1)使用懒加载组件
-    if (menu.menuType === 1 && menu.component) {
-      if (componentMap[menu.component]) {
+    if (menu.menuType === 1) {
+      if (menu.component && componentMap[menu.component]) {
         route.component = componentMap[menu.component]
-      } else {
-        // 不在映射表中的组件，尝试按约定路径加载
-        route.component = () => import(`@/views/${menu.component}.vue`).catch(() => ({ render: () => null }))
+      } else if (menu.component) {
+        // 不在映射表中，尝试动态加载
+        route.component = () => import(`@/views/${menu.component}.vue`).catch((e) => {
+          console.warn('组件加载失败:', menu.component, e)
+          return { default: { template: '<div class="error-page">页面加载失败</div>' } }
+        })
+      } else if (menu.path) {
+        const guessedComponent = guessComponent(menu.path, menu.menuName)
+        if (guessedComponent && componentMap[guessedComponent]) {
+          route.component = componentMap[guessedComponent]
+        } else {
+          console.warn('无法匹配组件:', menu.path, menu.menuName)
+        }
       }
     }
     if (menu.children && menu.children.length > 0) {

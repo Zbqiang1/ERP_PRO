@@ -32,6 +32,17 @@ public class OrganizationController {
     }
 
     /**
+     * 查询组织树（不分页，返回全部）
+     */
+    @GetMapping("/tree")
+    public Result<Page<OrganizationVO>> tree() {
+        OrganizationQueryDTO queryDTO = new OrganizationQueryDTO();
+        queryDTO.setPage(1L);
+        queryDTO.setSize(9999L);
+        return Result.ok(organizationService.queryPage(queryDTO));
+    }
+
+    /**
      * 根据ID查询组织架构
      */
     @GetMapping("/{id}")
@@ -53,6 +64,7 @@ public class OrganizationController {
      */
     @PutMapping("/{id}")
     public Result<Void> update(@PathVariable Long id, @Valid @RequestBody OrganizationDTO dto) {
+        dto.setId(id);
         organizationService.update(dto);
         return Result.ok();
     }

@@ -100,7 +100,7 @@
       </template>
     </el-dialog>
 
-    <StockInOrderFormDialog
+    <FormDialog
       v-model="dialogVisible"
       :title="dialogTitle"
       :mode="dialogMode"
@@ -116,7 +116,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { stockInOrderPage, stockInOrderAdd, stockInOrderUpdate, stockInOrderDelete, stockInOrderGetById, stockInOrderConfirm } from '@/api/modules/inventory'
 import { warehouseListAll } from '@/api/modules/inventory'
-import StockInOrderFormDialog from './components/StockInOrderFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ inNo: '', inType: '', warehouseId: null, inDateRange: [] })

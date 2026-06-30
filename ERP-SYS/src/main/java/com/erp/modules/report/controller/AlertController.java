@@ -28,7 +28,11 @@ public class AlertController {
     /** 根据ID查询 */
     @GetMapping("/{id}")
     public Result<BusinessAlert> getById(@PathVariable Long id) {
-        return Result.ok(businessAlertService.getById(id));
+        BusinessAlert entity = businessAlertService.getById(id);
+        if (entity == null) {
+            return Result.notFound("预警记录不存在");
+        }
+        return Result.ok(entity);
     }
 
     /** 新增 */
@@ -46,6 +50,9 @@ public class AlertController {
     /** 删除 */
     @DeleteMapping("/{id}")
     public Result<Boolean> delete(@PathVariable Long id) {
-        return Result.ok(businessAlertService.removeById(id));
+        if (!businessAlertService.removeById(id)) {
+            return Result.notFound("预警记录不存在");
+        }
+        return Result.ok(true);
     }
 }

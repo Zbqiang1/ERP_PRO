@@ -28,7 +28,11 @@ public class SupplierServiceImpl extends ServiceImpl<SupplierMapper, Supplier> i
         LambdaQueryWrapper<Supplier> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(StringUtils.hasText(queryDTO.getSupplierCode()), Supplier::getSupplierCode, queryDTO.getSupplierCode());
         wrapper.like(StringUtils.hasText(queryDTO.getSupplierName()), Supplier::getSupplierName, queryDTO.getSupplierName());
-        wrapper.eq(queryDTO.getStatus() != null, Supplier::getStatus, queryDTO.getStatus());
+        Integer statusInt = null;
+        if (queryDTO.getStatus() != null && !queryDTO.getStatus().isEmpty()) {
+            try { statusInt = Integer.valueOf(queryDTO.getStatus()); } catch (NumberFormatException e) { }
+        }
+        wrapper.eq(statusInt != null, Supplier::getStatus, statusInt);
         wrapper.orderByDesc(Supplier::getCreateTime);
         Page<Supplier> resultPage = this.page(page, wrapper);
         Page<SupplierVO> voPage = new Page<>(resultPage.getCurrent(), resultPage.getSize(), resultPage.getTotal());

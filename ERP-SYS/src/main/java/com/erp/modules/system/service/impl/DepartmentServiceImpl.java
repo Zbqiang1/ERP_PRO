@@ -89,10 +89,14 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper, Departm
      * @return 树形部门列表
      */
     private List<Department> buildDeptTree(List<Department> deptList, Long parentId) {
+        if (deptList == null) {
+            return new ArrayList<>();
+        }
+        Long safeParentId = parentId != null ? parentId : 0L;
         List<Department> treeList = new ArrayList<>();
         for (Department dept : deptList) {
-            if ((parentId == 0L && dept.getParentId() == null)
-                    || (parentId != 0L && parentId.equals(dept.getParentId()))) {
+            if ((safeParentId == 0L && dept.getParentId() == null)
+                    || (safeParentId != 0L && safeParentId.equals(dept.getParentId()))) {
                 // 注意：Department实体没有children字段，这里返回的是平铺结构
                 // 前端可以根据parentId自行构建树
                 treeList.add(dept);

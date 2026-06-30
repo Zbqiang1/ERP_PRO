@@ -69,5 +69,7 @@ spring:
 logging:
   level:
     com.erp: DEBUG
+    com.erp.modules.*.mapper: DEBUG
+    com.baomidou.mybatisplus: DEBUG
     org.flowable: INFO
     org.springframework.security: DEBUG

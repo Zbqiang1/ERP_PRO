@@ -74,7 +74,7 @@
       </div>
     </el-card>
 
-    <WorkOrderFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" @confirm="handleSave"
     />
@@ -86,7 +86,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { workOrderPage, workOrderAdd, workOrderUpdate, workOrderDelete, workOrderGetById, workOrderStart, workOrderComplete } from '@/api/modules/production'
-import WorkOrderFormDialog from './components/WorkOrderFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const router = useRouter()
 const loading = ref(false)

@@ -19,7 +19,7 @@ public class SalesOrderQueryDTO implements Serializable {
     private String customerName;
 
     /** 状态 */
-    private Integer status;
+    private String status;
 
     /** 下单开始日期 */
     private String orderDateStart;

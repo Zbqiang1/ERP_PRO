@@ -97,7 +97,7 @@
       </template>
     </el-dialog>
 
-    <VoucherFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" @confirm="handleSave"
     />
@@ -108,7 +108,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { voucherPage, voucherAdd, voucherUpdate, voucherDelete, voucherGetById, voucherAudit, voucherPost } from '@/api/modules/finance'
-import VoucherFormDialog from './components/VoucherFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ voucherNo: '', voucherType: '', status: '', dateRange: [] })

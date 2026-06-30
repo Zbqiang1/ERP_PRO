@@ -19,7 +19,7 @@ public class SalesQuotationQueryDTO implements Serializable {
     private String customerName;
 
     /** 状态 */
-    private Integer status;
+    private String status;
 
     /** 当前页码 */
     private Long page;

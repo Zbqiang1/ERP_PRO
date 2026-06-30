@@ -53,6 +53,7 @@ public class PerformanceController {
      */
     @PutMapping("/{id}")
     public Result<Void> update(@PathVariable Long id, @Valid @RequestBody PerformanceDTO dto) {
+        dto.setId(id);
         performanceService.update(dto);
         return Result.ok();
     }

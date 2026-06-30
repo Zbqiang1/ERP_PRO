@@ -30,7 +30,11 @@ public class SalesQuotationServiceImpl extends ServiceImpl<SalesQuotationMapper,
         LambdaQueryWrapper<SalesQuotation> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(StringUtils.hasText(queryDTO.getQuotationNo()), SalesQuotation::getQuotationNo, queryDTO.getQuotationNo());
         wrapper.like(StringUtils.hasText(queryDTO.getCustomerName()), SalesQuotation::getCustomerName, queryDTO.getCustomerName());
-        wrapper.eq(queryDTO.getStatus() != null, SalesQuotation::getStatus, queryDTO.getStatus());
+        Integer statusInt = null;
+        if (queryDTO.getStatus() != null && !queryDTO.getStatus().isEmpty()) {
+            try { statusInt = Integer.valueOf(queryDTO.getStatus()); } catch (NumberFormatException e) { }
+        }
+        wrapper.eq(statusInt != null, SalesQuotation::getStatus, statusInt);
         wrapper.orderByDesc(SalesQuotation::getCreateTime);
         Page<SalesQuotation> resultPage = this.page(page, wrapper);
         Page<SalesQuotationVO> voPage = new Page<>(resultPage.getCurrent(), resultPage.getSize(), resultPage.getTotal());

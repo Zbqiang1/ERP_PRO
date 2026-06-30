@@ -15,6 +15,9 @@ public class EmployeeDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** 主键ID（更新时由Controller从路径参数设置） */
+    private Long id;
+
     /** 员工编号 */
     private String employeeNo;
 

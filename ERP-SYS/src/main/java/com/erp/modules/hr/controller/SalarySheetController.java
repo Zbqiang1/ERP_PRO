@@ -53,6 +53,7 @@ public class SalarySheetController {
      */
     @PutMapping("/{id}")
     public Result<Void> update(@PathVariable Long id, @Valid @RequestBody SalarySheetDTO dto) {
+        dto.setId(id);
         salarySheetService.update(dto);
         return Result.ok();
     }

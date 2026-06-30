@@ -67,7 +67,7 @@
       </div>
     </el-card>
 
-    <LeaveSheetFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" :employee-options="employeeOptions" @confirm="handleSave"
     />
@@ -79,7 +79,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { leaveSheetPage, leaveSheetAdd, leaveSheetUpdate, leaveSheetDelete, leaveSheetGetById, leaveSheetApprove } from '@/api/modules/hr'
 import { employeeListAll } from '@/api/modules/hr'
-import LeaveSheetFormDialog from './components/LeaveSheetFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ leaveNo: '', employeeId: null, status: '' })

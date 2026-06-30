@@ -30,9 +30,11 @@ public class TaxInvoiceServiceImpl extends ServiceImpl<TaxInvoiceMapper, TaxInvo
                         .or().like(TaxInvoice::getBuyerName, dto.getKeyword())
                         .or().like(TaxInvoice::getSellerName, dto.getKeyword()));
             }
-            if (dto.getStatus() != null) {
-                wrapper.eq(TaxInvoice::getStatus, dto.getStatus());
+            Integer statusInt = null;
+            if (dto.getStatus() != null && !dto.getStatus().isEmpty()) {
+                try { statusInt = Integer.valueOf(dto.getStatus()); } catch (NumberFormatException e) { }
             }
+            wrapper.eq(statusInt != null, TaxInvoice::getStatus, statusInt);
             if (StringUtils.hasText(dto.getStartDate())) {
                 wrapper.ge(TaxInvoice::getInvoiceDate, dto.getStartDate());
             }

@@ -22,7 +22,7 @@ public class PurchaseReturnQueryDTO implements Serializable {
     private String supplierName;
 
     /** 状态 */
-    private Integer status;
+    private String status;
 
     /** 当前页码 */
     private Long page;

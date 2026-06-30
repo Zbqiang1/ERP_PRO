@@ -99,7 +99,7 @@
       </template>
     </el-dialog>
 
-    <StockOutOrderFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" :warehouse-options="warehouseOptions" @confirm="handleSave"
     />
@@ -111,7 +111,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { stockOutOrderPage, stockOutOrderAdd, stockOutOrderUpdate, stockOutOrderDelete, stockOutOrderGetById, stockOutOrderConfirm } from '@/api/modules/inventory'
 import { warehouseListAll } from '@/api/modules/inventory'
-import StockOutOrderFormDialog from './components/StockOutOrderFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ outNo: '', outType: '', warehouseId: null, outDateRange: [] })

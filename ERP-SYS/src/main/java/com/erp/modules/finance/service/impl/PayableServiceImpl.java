@@ -29,9 +29,11 @@ public class PayableServiceImpl extends ServiceImpl<PayableMapper, Payable> impl
                 wrapper.and(w -> w.like(Payable::getPayableNo, dto.getKeyword())
                         .or().like(Payable::getSupplierName, dto.getKeyword()));
             }
-            if (dto.getStatus() != null) {
-                wrapper.eq(Payable::getStatus, dto.getStatus());
+            Integer statusInt = null;
+            if (dto.getStatus() != null && !dto.getStatus().isEmpty()) {
+                try { statusInt = Integer.valueOf(dto.getStatus()); } catch (NumberFormatException e) { }
             }
+            wrapper.eq(statusInt != null, Payable::getStatus, statusInt);
             if (StringUtils.hasText(dto.getStartDate())) {
                 wrapper.ge(Payable::getDueDate, dto.getStartDate());
             }

@@ -57,15 +57,20 @@ public class PerformanceServiceImpl extends ServiceImpl<PerformanceMapper, Perfo
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(PerformanceDTO dto) {
-        Performance performance = new Performance();
-        BeanUtils.copyProperties(dto, performance);
-        this.updateById(performance);
+        Performance existing = this.getById(dto.getId());
+        if (existing == null) {
+            throw new BusinessException("绩效考核记录不存在");
+        }
+        BeanUtils.copyProperties(dto, existing);
+        this.updateById(existing);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        this.removeById(id);
+        if (!this.removeById(id)) {
+            throw new BusinessException("绩效考核记录不存在");
+        }
     }
 
     private PerformanceVO toVO(Performance performance) {

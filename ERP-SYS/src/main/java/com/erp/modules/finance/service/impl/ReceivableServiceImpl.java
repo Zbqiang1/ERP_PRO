@@ -29,9 +29,11 @@ public class ReceivableServiceImpl extends ServiceImpl<ReceivableMapper, Receiva
                 wrapper.and(w -> w.like(Receivable::getReceivableNo, dto.getKeyword())
                         .or().like(Receivable::getCustomerName, dto.getKeyword()));
             }
-            if (dto.getStatus() != null) {
-                wrapper.eq(Receivable::getStatus, dto.getStatus());
+            Integer statusInt = null;
+            if (dto.getStatus() != null && !dto.getStatus().isEmpty()) {
+                try { statusInt = Integer.valueOf(dto.getStatus()); } catch (NumberFormatException e) { }
             }
+            wrapper.eq(statusInt != null, Receivable::getStatus, statusInt);
             if (StringUtils.hasText(dto.getStartDate())) {
                 wrapper.ge(Receivable::getDueDate, dto.getStartDate());
             }

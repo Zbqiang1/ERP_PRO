@@ -42,7 +42,11 @@ public class PurchaseOrderServiceImpl extends ServiceImpl<PurchaseOrderMapper, P
         LambdaQueryWrapper<PurchaseOrder> wrapper = new LambdaQueryWrapper<>();
         wrapper.like(StringUtils.hasText(queryDTO.getPoNo()), PurchaseOrder::getPoNo, queryDTO.getPoNo());
         wrapper.like(StringUtils.hasText(queryDTO.getSupplierName()), PurchaseOrder::getSupplierName, queryDTO.getSupplierName());
-        wrapper.eq(queryDTO.getStatus() != null, PurchaseOrder::getStatus, queryDTO.getStatus());
+        Integer statusInt = null;
+        if (queryDTO.getStatus() != null && !queryDTO.getStatus().isEmpty()) {
+            try { statusInt = Integer.valueOf(queryDTO.getStatus()); } catch (NumberFormatException e) { }
+        }
+        wrapper.eq(statusInt != null, PurchaseOrder::getStatus, statusInt);
         wrapper.orderByDesc(PurchaseOrder::getCreateTime);
         Page<PurchaseOrder> resultPage = this.page(page, wrapper);
         Page<PurchaseOrderVO> voPage = new Page<>(resultPage.getCurrent(), resultPage.getSize(), resultPage.getTotal());

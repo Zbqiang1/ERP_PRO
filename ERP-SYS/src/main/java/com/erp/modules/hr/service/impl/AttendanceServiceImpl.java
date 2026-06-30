@@ -28,7 +28,11 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
         Page<Attendance> page = new Page<>(queryDTO.getPage() != null ? queryDTO.getPage() : 1,
                 queryDTO.getSize() != null ? queryDTO.getSize() : 10);
         LambdaQueryWrapper<Attendance> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(queryDTO.getStatus() != null, Attendance::getAttendanceType, queryDTO.getStatus());
+        Integer statusInt = null;
+        if (queryDTO.getStatus() != null && !queryDTO.getStatus().isEmpty()) {
+            try { statusInt = Integer.valueOf(queryDTO.getStatus()); } catch (NumberFormatException e) { }
+        }
+        wrapper.eq(statusInt != null, Attendance::getAttendanceType, statusInt);
         wrapper.orderByDesc(Attendance::getAttendanceDate);
         Page<Attendance> resultPage = this.page(page, wrapper);
         Page<AttendanceVO> voPage = new Page<>(resultPage.getCurrent(), resultPage.getSize(), resultPage.getTotal());
@@ -56,15 +60,20 @@ public class AttendanceServiceImpl extends ServiceImpl<AttendanceMapper, Attenda
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(AttendanceDTO dto) {
-        Attendance attendance = new Attendance();
-        BeanUtils.copyProperties(dto, attendance);
-        this.updateById(attendance);
+        Attendance existing = this.getById(dto.getId());
+        if (existing == null) {
+            throw new BusinessException("考勤记录不存在");
+        }
+        BeanUtils.copyProperties(dto, existing);
+        this.updateById(existing);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        this.removeById(id);
+        if (!this.removeById(id)) {
+            throw new BusinessException("考勤记录不存在");
+        }
     }
 
     private AttendanceVO toVO(Attendance attendance) {

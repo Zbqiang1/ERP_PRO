@@ -53,6 +53,7 @@ public class AttendanceController {
      */
     @PutMapping("/{id}")
     public Result<Void> update(@PathVariable Long id, @Valid @RequestBody AttendanceDTO dto) {
+        dto.setId(id);
         attendanceService.update(dto);
         return Result.ok();
     }

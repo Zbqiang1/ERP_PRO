@@ -19,7 +19,7 @@ public class SupplierQueryDTO implements Serializable {
     private String supplierName;
 
     /** 状态（0-停用 1-启用） */
-    private Integer status;
+    private String status;
 
     /** 当前页码 */
     private Long page;

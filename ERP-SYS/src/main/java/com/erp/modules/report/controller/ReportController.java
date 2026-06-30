@@ -28,7 +28,11 @@ public class ReportController {
     /** 根据ID查询 */
     @GetMapping("/{id}")
     public Result<ReportTemplate> getById(@PathVariable Long id) {
-        return Result.ok(reportTemplateService.getById(id));
+        ReportTemplate entity = reportTemplateService.getById(id);
+        if (entity == null) {
+            return Result.notFound("报表模板不存在");
+        }
+        return Result.ok(entity);
     }
 
     /** 新增 */
@@ -46,6 +50,9 @@ public class ReportController {
     /** 删除 */
     @DeleteMapping("/{id}")
     public Result<Boolean> delete(@PathVariable Long id) {
-        return Result.ok(reportTemplateService.removeById(id));
+        if (!reportTemplateService.removeById(id)) {
+            return Result.notFound("报表模板不存在");
+        }
+        return Result.ok(true);
     }
 }

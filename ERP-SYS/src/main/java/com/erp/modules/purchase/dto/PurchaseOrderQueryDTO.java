@@ -19,7 +19,7 @@ public class PurchaseOrderQueryDTO implements Serializable {
     private String supplierName;
 
     /** 状态 */
-    private Integer status;
+    private String status;
 
     /** 下单开始日期 */
     private String orderDateStart;

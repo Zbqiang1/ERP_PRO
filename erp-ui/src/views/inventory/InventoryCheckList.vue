@@ -89,7 +89,7 @@
       </template>
     </el-dialog>
 
-    <InventoryCheckFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" :warehouse-options="warehouseOptions" @confirm="handleSave"
     />
@@ -101,7 +101,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { inventoryCheckPage, inventoryCheckAdd, inventoryCheckUpdate, inventoryCheckDelete, inventoryCheckGetById, inventoryCheckConfirm, inventoryCheckAdjust } from '@/api/modules/inventory'
 import { warehouseListAll } from '@/api/modules/inventory'
-import InventoryCheckFormDialog from './components/InventoryCheckFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ checkNo: '', warehouseId: null, checkType: '' })

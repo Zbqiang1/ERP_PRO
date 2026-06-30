@@ -58,15 +58,20 @@ public class OrganizationServiceImpl extends ServiceImpl<OrganizationMapper, Org
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(OrganizationDTO dto) {
-        Organization org = new Organization();
-        BeanUtils.copyProperties(dto, org);
-        this.updateById(org);
+        Organization existing = this.getById(dto.getId());
+        if (existing == null) {
+            throw new BusinessException("组织架构不存在");
+        }
+        BeanUtils.copyProperties(dto, existing);
+        this.updateById(existing);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        this.removeById(id);
+        if (!this.removeById(id)) {
+            throw new BusinessException("组织架构不存在");
+        }
     }
 
     private OrganizationVO toVO(Organization org) {

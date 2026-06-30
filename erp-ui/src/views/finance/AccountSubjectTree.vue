@@ -114,7 +114,7 @@ const fetchData = async () => {
   loading.value = true
   try {
     const res = await accountSubjectTree()
-    if (res.code === 200) { tableData.value = res.data || [] }
+    if (res.code === 200) { tableData.value = res.data?.records || res.data || [] }
   } catch { ElMessage.error('获取科目树失败') } finally { loading.value = false }
 }
 

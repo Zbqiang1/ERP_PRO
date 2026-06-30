@@ -28,9 +28,11 @@ public class StockInOrderServiceImpl extends ServiceImpl<StockInOrderMapper, Sto
             if (StringUtils.hasText(dto.getKeyword())) {
                 wrapper.and(w -> w.like(StockInOrder::getInNo, dto.getKeyword()));
             }
-            if (dto.getStatus() != null) {
-                wrapper.eq(StockInOrder::getStatus, dto.getStatus());
+            Integer statusInt = null;
+            if (dto.getStatus() != null && !dto.getStatus().isEmpty()) {
+                try { statusInt = Integer.valueOf(dto.getStatus()); } catch (NumberFormatException e) { }
             }
+            wrapper.eq(statusInt != null, StockInOrder::getStatus, statusInt);
             if (StringUtils.hasText(dto.getStartDate())) {
                 wrapper.ge(StockInOrder::getCreateTime, dto.getStartDate());
             }

@@ -74,7 +74,7 @@
       </div>
     </el-card>
 
-    <BomFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" @confirm="handleSave"
     />
@@ -108,7 +108,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { bomHeaderPage, bomHeaderAdd, bomHeaderUpdate, bomHeaderDelete, bomHeaderGetById, bomDetailListByHeaderId } from '@/api/modules/production'
-import BomFormDialog from './components/BomFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ bomNo: '', productName: '', status: '' })

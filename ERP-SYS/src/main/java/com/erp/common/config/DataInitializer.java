@@ -96,9 +96,12 @@ public class DataInitializer implements CommandLineRunner {
      * 初始化默认菜单
      */
     private void initMenus() {
+        // 删除旧菜单数据（确保 component 等字段为最新值）
         if (menuMapper.selectCount(null) > 0) {
-            log.info("菜单数据已存在，跳过初始化");
-            return;
+            log.info("检测到旧菜单数据，正在重建...");
+            // 先删关联
+            roleMenuMapper.delete(new LambdaQueryWrapper<>());
+            menuMapper.delete(new LambdaQueryWrapper<>());
         }
 
         // 一级菜单

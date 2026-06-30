@@ -22,7 +22,7 @@ public class UserQueryDTO implements Serializable {
     private String phone;
 
     /** 状态（0-禁用 1-启用） */
-    private Integer status;
+    private String status;
 
     /** 部门ID */
     private String deptId;

@@ -48,6 +48,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     public List<MenuVO> getMenuTreeByUserId(String userId) {
         // 根据用户ID查询菜单
         List<Menu> menuList = menuMapper.selectByUserId(userId);
+        if (menuList == null || menuList.isEmpty()) {
+            return new ArrayList<>();
+        }
         // 转换为VO列表
         List<MenuVO> voList = menuList.stream().map(menu -> {
             MenuVO vo = new MenuVO();
@@ -111,11 +114,15 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
      * @return 树形菜单列表
      */
     private List<MenuVO> buildMenuTree(List<MenuVO> menuList, Long parentId) {
+        if (menuList == null) {
+            return new ArrayList<>();
+        }
+        Long safeParentId = parentId != null ? parentId : 0L;
         List<MenuVO> treeList = new ArrayList<>();
         for (MenuVO menu : menuList) {
             // 将 null 和 0L 都视为根节点
             Long menuParentId = menu.getParentId() != null ? menu.getParentId() : 0L;
-            if (parentId.equals(menuParentId)) {
+            if (safeParentId.equals(menuParentId)) {
                 // 递归查找子节点
                 List<MenuVO> children = buildMenuTree(menuList, menu.getId());
                 menu.setChildren(children);

@@ -41,11 +41,6 @@ const router = createRouter({
   routes: [
     ...publicRoutes,
     mainLayoutRoute,
-    {
-      path: '/:pathMatch(.*)*',
-      redirect: '/404',
-      meta: { hidden: true }
-    }
   ],
   scrollBehavior: () => ({ top: 0 })
 })
@@ -112,7 +107,7 @@ router.beforeEach(async (to, from, next) => {
 
         hasAddedRoutes = true
         // 重新解析当前路径，匹配动态路由
-        next({ ...to, replace: true })
+        next({ path: to.fullPath || to.path, replace: true })
         return
       } catch (error) {
         console.error('获取用户信息或路由失败', error)

@@ -29,7 +29,11 @@ public class SubcontractController {
     /** 根据ID查询 */
     @GetMapping("/{id}")
     public Result<Subcontract> getById(@PathVariable Long id) {
-        return Result.ok(subcontractService.getById(id));
+        Subcontract entity = subcontractService.getById(id);
+        if (entity == null) {
+            return Result.notFound("委外加工记录不存在");
+        }
+        return Result.ok(entity);
     }
 
     /** 新增 */
@@ -47,6 +51,9 @@ public class SubcontractController {
     /** 删除 */
     @DeleteMapping("/{id}")
     public Result<Boolean> delete(@PathVariable Long id) {
-        return Result.ok(subcontractService.removeById(id));
+        if (!subcontractService.removeById(id)) {
+            return Result.notFound("委外加工记录不存在");
+        }
+        return Result.ok(true);
     }
 }

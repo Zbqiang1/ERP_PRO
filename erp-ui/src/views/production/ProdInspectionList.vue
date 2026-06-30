@@ -69,7 +69,7 @@
       </div>
     </el-card>
 
-    <ProdInspectionFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" @confirm="handleSave"
     />
@@ -98,7 +98,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { prodInspectionPage, prodInspectionAdd, prodInspectionUpdate, prodInspectionDelete, prodInspectionGetById } from '@/api/modules/production'
-import ProdInspectionFormDialog from './components/ProdInspectionFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ inspectionNo: '', woNo: '', inspectionType: '', inspectionResult: '' })

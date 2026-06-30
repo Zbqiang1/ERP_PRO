@@ -34,7 +34,7 @@ public class FinanceQueryDTO implements Serializable {
     /**
      * 状态
      */
-    private Integer status;
+    private String status;
 
     /**
      * 当前页码

@@ -22,7 +22,7 @@ public class PurchaseRequestQueryDTO implements Serializable {
     private String applicantId;
 
     /** 状态 */
-    private Integer status;
+    private String status;
 
     /** 申请开始日期 */
     private String applyDateStart;

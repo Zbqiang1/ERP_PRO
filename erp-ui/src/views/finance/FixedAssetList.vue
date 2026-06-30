@@ -77,7 +77,7 @@
       </div>
     </el-card>
 
-    <FixedAssetFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" @confirm="handleSave"
     />
@@ -88,7 +88,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { fixedAssetPage, fixedAssetAdd, fixedAssetUpdate, fixedAssetDelete, fixedAssetGetById, fixedAssetDepreciation } from '@/api/modules/finance'
-import FixedAssetFormDialog from './components/FixedAssetFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ assetNo: '', assetName: '', category: '', status: '' })

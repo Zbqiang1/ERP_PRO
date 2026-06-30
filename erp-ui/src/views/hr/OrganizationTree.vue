@@ -110,7 +110,8 @@ const fetchData = async () => {
   loading.value = true
   try {
     const res = await organizationTree()
-    if (res.code === 200) { tableData.value = res.data || [] }
+    if (res.code === 200) { tableData.value = res.data?.records || res.data || [] }
+    // 后端返回 Page 对象时取 records；返回数组时直接使用
   } catch { ElMessage.error('获取组织树失败') } finally { loading.value = false }
 }
 

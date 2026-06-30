@@ -57,7 +57,7 @@
       </template>
     </el-dialog>
 
-    <WoRoutingFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" :work-order-id="route.query.workOrderId" @confirm="handleSave"
     />
@@ -70,7 +70,7 @@ import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { woRoutingPage, woRoutingAdd, woRoutingUpdate, woRoutingDelete, woRoutingComplete, woRoutingAssignWorker } from '@/api/modules/production'
 import { employeeListAll } from '@/api/modules/hr'
-import WoRoutingFormDialog from './components/WoRoutingFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const route = useRoute()
 const loading = ref(false)

@@ -100,7 +100,7 @@
       </template>
     </el-dialog>
 
-    <TransferOrderFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" :warehouse-options="warehouseOptions" @confirm="handleSave"
     />
@@ -112,7 +112,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { transferOrderPage, transferOrderAdd, transferOrderUpdate, transferOrderDelete, transferOrderGetById } from '@/api/modules/inventory'
 import { warehouseListAll } from '@/api/modules/inventory'
-import TransferOrderFormDialog from './components/TransferOrderFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ transferNo: '', fromWarehouseId: null, toWarehouseId: null, transferDateRange: [] })

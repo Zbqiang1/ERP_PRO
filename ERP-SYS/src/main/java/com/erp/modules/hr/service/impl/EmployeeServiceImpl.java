@@ -32,7 +32,11 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         wrapper.like(StringUtils.hasText(queryDTO.getRealName()), Employee::getRealName, queryDTO.getRealName());
         wrapper.like(StringUtils.hasText(queryDTO.getPhone()), Employee::getPhone, queryDTO.getPhone());
         wrapper.eq(queryDTO.getOrgId() != null, Employee::getOrgId, queryDTO.getOrgId());
-        wrapper.eq(queryDTO.getStatus() != null, Employee::getStatus, queryDTO.getStatus());
+        Integer statusInt = null;
+        if (queryDTO.getStatus() != null && !queryDTO.getStatus().isEmpty()) {
+            try { statusInt = Integer.valueOf(queryDTO.getStatus()); } catch (NumberFormatException e) { }
+        }
+        wrapper.eq(statusInt != null, Employee::getStatus, statusInt);
         wrapper.orderByDesc(Employee::getCreateTime);
         Page<Employee> resultPage = this.page(page, wrapper);
         Page<EmployeeVO> voPage = new Page<>(resultPage.getCurrent(), resultPage.getSize(), resultPage.getTotal());
@@ -60,15 +64,20 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(EmployeeDTO dto) {
-        Employee employee = new Employee();
-        BeanUtils.copyProperties(dto, employee);
-        this.updateById(employee);
+        Employee existing = this.getById(dto.getId());
+        if (existing == null) {
+            throw new BusinessException("员工不存在");
+        }
+        BeanUtils.copyProperties(dto, existing);
+        this.updateById(existing);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        this.removeById(id);
+        if (!this.removeById(id)) {
+            throw new BusinessException("员工不存在");
+        }
     }
 
     @Override

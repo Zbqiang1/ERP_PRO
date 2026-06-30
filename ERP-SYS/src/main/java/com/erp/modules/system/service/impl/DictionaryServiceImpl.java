@@ -9,6 +9,7 @@ import com.erp.modules.system.service.IDictionaryService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +26,8 @@ public class DictionaryServiceImpl extends ServiceImpl<DictionaryMapper, Diction
 
     @Override
     public List<Dictionary> getByDictType(String dictType) {
-        return dictionaryMapper.selectByDictType(dictType);
+        List<Dictionary> result = dictionaryMapper.selectByDictType(dictType);
+        return result != null ? result : new ArrayList<>();
     }
 
     @Override

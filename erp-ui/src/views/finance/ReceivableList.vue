@@ -96,7 +96,7 @@
       </template>
     </el-dialog>
 
-    <ReceivableFormDialog
+    <FormDialog
       v-model="dialogVisible" :title="dialogTitle" :mode="dialogMode"
       :data="currentRow" :customer-options="customerOptions" @confirm="handleSave"
     />
@@ -108,7 +108,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { receivablePage, receivableAdd, receivableUpdate, receivableDelete, receivableGetById, receivableCollect } from '@/api/modules/finance'
 import { customerListAll } from '@/api/modules/customer'
-import ReceivableFormDialog from './components/ReceivableFormDialog.vue'
+import FormDialog from '@/components/common/FormDialog.vue'
 
 const loading = ref(false)
 const searchForm = ref({ receivableNo: '', customerId: null, status: '' })
